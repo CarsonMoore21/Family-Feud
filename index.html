@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Family Feud Thanksgiving</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <div id="game" class="container">
+    <!-- Welcome Screen (Only visible on the first load) -->
+    <div id="welcome" class="welcome">
+      <h1>Welcome to ITS GIVING FEUD!</h1>
+      <h2>HOSTED BY GTN HALL COUNCIL.</h1>
+      <h2>President: Carson Moore</h2>
+      <h2>Vice President: Audria Taylor</h2>
+      
+      <button id="start" class="start-btn">Start Game</button>
+    </div>
+
+    <!-- Round & Question (Initially hidden) -->
+    <div id="round" class="question" style="display:none;">Round 1: Thanksgiving Dinner</div>
+    <div id="question" class="question" style="display:none;">Name a dish you’d find at Thanksgiving dinner.</div>
+
+    <!-- Answer Board (Initially hidden) -->
+    <div id="board" class="board" style="display:none;">
+      <!-- Answer boxes will be generated dynamically -->
+    </div>
+
+    <!-- Navigation Buttons (Initially hidden) -->
+    <div class="navigation" style="display:none;">
+      <button id="back" class="back-btn" style="display:none;">Back</button>
+      <button id="next" class="next-btn">Next Round</button>
+    </div>
+  </div>
+
+  <script>
+    const rounds = [
+      {
+        title: "Round 1: Thanksgiving Dinner",
+        question: "Name a dish you’d find at Thanksgiving dinner.",
+        answers: [
+          { text: "Turkey", points: 50 },
+          { text: "Mac N Cheese", points: 40 },
+          { text: "Mashed Potatoes", points: 35 },
+          { text: "Dressing/Stuffing", points: 30 },
+          { text: "Potato Salad", points: 20 },
+          { text: "Pumpkin Pie", points: 10 },
+        ],
+      },
+      {
+        title: "Round 2: Thanksgiving Traditions",
+        question: "Name a Thanksgiving tradition.",
+        answers: [
+          { text: "Eating Dinner with Family", points: 80 },
+          { text: "Watching Football", points: 60 },
+          { text: "Watching a Parade", points: 40 },
+          { text: "Taking a Nap", points: 20 },
+          { text: "Going On a Walk", points: 10 },
+          { text: "Gossiping", points: 5 },
+        ],
+      },
+      {
+        title: "Round 3: Thanksgiving Mishaps",
+        question: "Name a Thanksgiving dinner disaster.",
+        answers: [
+          { text: "Burning the Turkey", points: 40 },
+          { text: "Dropping your Plate", points: 25 },
+          { text: "Family Argument", points: 15 },
+          { text: "Missing Ingredients", points: 10 },
+          { text: "Nobody Showing up", points: 10 },
+          { text: "Someone Saying It's Nasty", points: 5 },
+        ],
+      },
+      {
+        title: "Round 4: Thanksgiving Prep",
+        question: "Name something you do to get ready for Thanksgiving.",
+        answers: [
+          { text: "Grocery Shopping", points: 35 },
+          { text: "Cleaning the House", points: 30 },
+          { text: "Cooking/Baking", points: 25 },
+          { text: "Setting the Table", points: 10 },
+          { text: "Defrosting the Turkey", points: 5 },
+        ],
+      },
+      {
+        title: "Round 5: Turkey Talk",
+        question: "Name a way to cook a turkey.",
+        answers: [
+          { text: "Baking", points: 80 },
+          { text: "Roasting", points: 50 },
+          { text: "Frying", points: 40 },
+          { text: "Smoking", points: 35 },
+          { text: "Grilling", points: 10 },
+          { text: "Rotisserie", points: 5 },
+        ],
+      },
+      {
+        title: "Round 6: Thanksgiving Entertainment",
+        question: "Name something people watch on Thanksgiving.",
+        answers: [
+          { text: "Football", points: 50 },
+          { text: "Macy's Thanksgiving Day Parade", points: 30 },
+          { text: "Movies", points: 20 },
+          { text: "Tiktok", points: 15 },
+        ],
+      },
+      {
+        title: "Round 7: Thanksgiving Reset",
+        question: "Name a reason why someone might lay their head down.",
+        answers: [
+          { text: "Full", points: 80 },
+          { text: "Praying", points: 50 },
+          { text: "Sleeping", points: 30 },
+          { text: "Bored", points: 20 },
+          { text: "Ready To Leave", points: 10 },
+          { text: "Death of a family dog", points: 5 },
+        ],
+      },
+      {
+        title: "Round 8: Thanksgiving Leftovers",
+        question: "Name a dish that makes the best Thanksgiving leftovers.",
+        answers: [
+          { text: "Turkey", points: 70 },
+          { text: "Mashed Potatoes", points: 65 },
+          { text: "Mac N Cheese", points: 50 },
+          { text: "Casserole", points: 40 },
+          { text: "Rolls", points: 30 },
+          { text: "Pie", points: 20 },
+        ],
+      },
+      {
+        title: "Round 9: Thanksgiving Decor",
+        question: "Name a decoration you might see at Thanksgiving.",
+        answers: [
+          { text: "Turkeys", points: 70 },
+          { text: "Pumpkins", points: 60 },
+          { text: "Table Centerpieces", points: 50 },
+          { text: "Candles", points: 35 },
+          { text: "Cornucopia", points: 20 },
+          { text: "Acorns/Pinecones", points: 10 },
+        ],
+      },
+      {
+        title: "Round 10: Macy's Thanksgiving Parade",
+        question: "Name something you might see in the Macy's Thanksgiving Day Parade.",
+        answers: [
+          { text: "Floats", points: 60 },
+          { text: "Marching Band", points: 50 },
+          { text: "Santa", points: 40 },
+          { text: "Turkey", points: 30 },
+          { text: "Balloons", points: 20 },
+          { text: "Crowds of People", points: 10 },
+        ],
+      },
+      {
+        title: "Round 11: After Dinner",
+        question: "Name something people do after Thanksgiving dinner.",
+        answers: [
+          { text: "Take a Nap", points: 80 },
+          { text: "Go Shopping", points: 60 },
+          { text: "Watch TV", points: 40 },
+          { text: "Play Games", points: 20 },
+          { text: "Hangout", points: 15 },
+          { text: "Go for a Walk", points: 10 },
+        ],
+      },
+     {
+        title: "Bonus Round: Thanksgiving Gratitude",
+        question: "What's something you might be thankful for on Thanksgiving?",
+        answers: [
+          { text: "Family", points: 80 },
+          { text: "Friends", points: 70 },
+          { text: "Food", points: 65 },
+          { text: "Home", points: 50 },
+          { text: "Pets", points: 30 },
+          { text: "Health", points: 20 },
+        ],
+      }
+    ];
+
+    let currentRound = 0;
+
+    const roundElement = document.getElementById("round");
+    const questionElement = document.getElementById("question");
+    const boardElement = document.getElementById("board");
+    const nextButton = document.getElementById("next");
+    const backButton = document.getElementById("back");
+    const startButton = document.getElementById("start");
+    const welcomeElement = document.getElementById("welcome");
+    const navigationElement = document.querySelector('.navigation');
+
+    // Function to load a round
+    function loadRound(roundIndex) {
+      const round = rounds[roundIndex];
+      roundElement.textContent = round.title;
+      questionElement.textContent = round.question;
+
+      boardElement.innerHTML = "";
+      round.answers.forEach((answer) => {
+        const answerElement = document.createElement("div");
+        answerElement.classList.add("answer");
+        answerElement.dataset.answer = answer.text;
+        answerElement.dataset.points = answer.points;
+        answerElement.textContent = "Click to Reveal";
+
+        // Reveal answer on click
+        answerElement.addEventListener("click", () => {
+          answerElement.textContent = `${answer.text} (${answer.points})`;
+          answerElement.classList.add("revealed");
+        });
+
+        boardElement.appendChild(answerElement);
+      });
+
+      // Hide the "Back" button on the first round
+      backButton.style.display = roundIndex > 0 ? "inline-block" : "none";
+    }
+
+    // Show the welcome screen initially
+    startButton.addEventListener("click", () => {
+      welcomeElement.style.display = "none";
+      navigationElement.style.display = "block";
+      roundElement.style.display = "block";
+      questionElement.style.display = "block";
+      boardElement.style.display = "block";
+      loadRound(currentRound);
+    });
+
+    // Handle the "Next Round" button
+    nextButton.addEventListener("click", () => {
+      if (currentRound < rounds.length - 1) {
+        currentRound++;
+        loadRound(currentRound);
+      } else {
+        questionElement.textContent = "Stay Tuned For More Events Hosted By GTN Hall Council!";
+        roundElement.textContent = "Thank You For Playing!";
+
+        boardElement.innerHTML = "";
+        nextButton.style.display = "none";
+        backButton.style.display = "none";
+      }
+    });
+
+    // Handle the "Back" button
+    backButton.addEventListener("click", () => {
+      if (currentRound > 0) {
+        currentRound--;
+        loadRound(currentRound);
+      }
+    });
+  </script>
+</body>
+</html>
